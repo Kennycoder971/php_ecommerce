@@ -4,7 +4,7 @@ const BASE_URL = "http://localhost:8888/ecommerce/";
 
 // Connexion data
 const DB_HOST = "localhost:8889";
-const DB_NAME = "tienda";
+const DB_NAME = "e-commerce";
 const DB_USER = "root";
 const DB_PASSWORD = "root";
 const DB_CHARSET = "charset=utf8";

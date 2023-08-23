@@ -52,11 +52,11 @@ function generateBcryptPassword($str) {
 
 function sessionUser() {
     session_start();
-    if(!isset($_SESSION['idUser']) && !isset($_SESSION['loginName'])) {
+    if(!isset($_SESSION['userData'])) {
         header('Location: '.base_url().'login');
-    } else {
-        return true;
+        die();
     }
+    return $_SESSION['userData'];
 }
 function token() {
     $r1 = bin2hex(random_bytes(10));

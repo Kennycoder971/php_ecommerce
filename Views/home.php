@@ -2,6 +2,15 @@
  ?>
 
 <body>
+    <?php if(isset($_GET['msg'])): ?>
+
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Success!</strong> You have been registered successfully.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <?php endif; ?>
+
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
