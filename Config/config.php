@@ -1,6 +1,6 @@
 <?php 
 
-const BASE_URL = "http://localhost:8888/mvc_blueprint/";
+const BASE_URL = "http://localhost:8888/ecommerce/";
 
 // Connexion data
 const DB_HOST = "localhost:8889";

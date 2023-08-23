@@ -1,14 +1,18 @@
- <!DOCTYPE html>
- <html lang="en">
+<?php 
+    $data = array();
+    $data['page_title'] = "Not Found";
+?>
 
- <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Not Found</title>
- </head>
+<?php  include("Views/includes/header.php");
+ ?>
 
- <body>
-     <h1>Error 404</h1>
- </body>
+<div class="container text-center mt-5">
+    <h1 class="display-4">404</h1>
+    <p class="lead">Oops! The page you're looking for doesn't exist.</p>
+    <a href="/ecommerce" class="btn btn-primary">Go to Homepage</a>
+</div>
 
- </html>
+
+
+<?php  include("Views/includes/footer.php");
+ ?>
