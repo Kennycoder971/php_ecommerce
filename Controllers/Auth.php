@@ -1,7 +1,7 @@
 <?php 
 
 class Auth extends Controller{
-    function register() {
+    public function register() {
         $data['page_title'] = 'Register';
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = strClean($_POST['username']);
@@ -18,6 +18,8 @@ class Auth extends Controller{
             try {
                 $request = $this->model->register($name, $email, $password, $isSeller);
                 if(is_numeric($request)) {
+                    $user = $this->model->getUserById($request);
+                    setSession($user[0]);
                     header('Location: '.base_url().'?msg=success');
                     return;
                 } 
@@ -36,7 +38,7 @@ class Auth extends Controller{
         $this->views->getView($this,'register', $data);
     }
 
-    function login() {
+    public function login() {
         $data['page_title'] = 'Login';
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = strClean($_POST['email']);
@@ -44,8 +46,8 @@ class Auth extends Controller{
             
             try {
                 $user = $this->model->login($email);
-                if(!empty($user) || password_verify($password, $user['password'])) {
-                    $_SESSION['userData'] = $user;
+                if(!empty($user) && password_verify($password, $user['password'])) {
+                    setSession($user);
                     header('Location: '.base_url());
                     return;
                 } else {

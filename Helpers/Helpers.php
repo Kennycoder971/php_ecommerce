@@ -58,6 +58,11 @@ function sessionUser() {
     }
     return $_SESSION['userData'];
 }
+
+function setSession($userData) {
+    session_start();
+    $_SESSION['userData'] = $userData;
+}
 function token() {
     $r1 = bin2hex(random_bytes(10));
     $r2 = bin2hex(random_bytes(10));
