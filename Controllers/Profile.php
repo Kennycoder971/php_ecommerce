@@ -13,6 +13,7 @@ class Profile extends Controller {
         $user = getUserSession();
         $id = $user['id'];
         $data['user'] = $user;
+        $data['page_title'] = 'Profile';
         $username = strClean($_POST['username']);
         $email = strClean($_POST['email']);
        
@@ -26,6 +27,7 @@ class Profile extends Controller {
             if($isUpdateSuccess) {
                 $userModel = $this->loadModelByName('User');
                 $user = $userModel->getUserById($id);
+                $data['user'] = $user;
                 setSession($user);
                 $data['alert'] = ['type' => 'success', 'message' => 'Profile updated successfully'];
             } else {
