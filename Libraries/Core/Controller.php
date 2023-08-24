@@ -18,4 +18,15 @@ class Controller {
             $this->model = new $model();
         }
     }
+
+    public function loadModelByName($modelName) {
+        $model = $modelName . 'Model';
+        $modelFile = 'Models/' . $model . '.php';
+
+        if(file_exists($modelFile)) {
+            require_once $modelFile;
+            $this->model = new $model();
+            return $this->model;
+        }
+    }
 }

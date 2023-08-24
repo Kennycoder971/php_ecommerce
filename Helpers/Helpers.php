@@ -50,11 +50,7 @@ function generateBcryptPassword($str) {
     return password_hash($str, PASSWORD_BCRYPT, $options);
 }
 
-function setSession($userData) {
-    session_start();
-    $_SESSION['userData'] = $userData;
-}
-
+// SESSIONS
 function isSessionActive() {
     return session_status() === PHP_SESSION_ACTIVE;
 }
@@ -68,6 +64,14 @@ function getUserSession() {
         return null; // No active session
     }
 }
+
+function setSession($userData) {
+    if(!isSessionActive()) session_start();
+    $_SESSION['userData'] = $userData;
+}
+
+// END SESSIONS
+
 function token() {
     $r1 = bin2hex(random_bytes(10));
     $r2 = bin2hex(random_bytes(10));
