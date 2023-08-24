@@ -58,7 +58,7 @@ function isSessionActive() {
 function getUserSession() {
     if(!isSessionActive()) session_start();
     
-    if ($_SESSION['userData']) {
+    if (isset($_SESSION['userData'])) {
         return $_SESSION['userData'];
     } else {
         return null; // No active session

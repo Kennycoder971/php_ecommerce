@@ -5,7 +5,6 @@ class Profile extends Controller {
         $data['page_title'] = 'Profile';
         $user = getUserSession();
         $data['user'] = $user;
-        
         $this->views->getView($this,'profile', $data);
     }
 
@@ -38,6 +37,48 @@ class Profile extends Controller {
         }
 
         $this->views->getView($this,'profile', $data);
+    }
 
+    public function security () {
+        $data['page_title'] = 'Security';
+        $user = getUserSession();
+        $data['user'] = $user;
+        
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $currentPassword = strClean($_POST['currentPassword']);
+            $newPassword = strClean($_POST['newPassword']);
+            $confirmPassword = strClean($_POST['confirmPassword']);
+    
+            if(empty($currentPassword) || empty($newPassword) || empty($confirmPassword)) {
+                $data['alert'] = ['type' => 'danger', 'message' => 'All fields are required'];
+                $this->views->getView($this,'security', $data);
+                return;
+            }
+    
+            if(!password_verify($currentPassword, $user['password'])) {
+                $data['alert'] = ['type' => 'danger', 'message' => 'Current password is incorrect'];
+                $this->views->getView($this,'security', $data);
+                return;
+            }
+    
+            if($newPassword !== $confirmPassword) {
+                $data['alert'] = ['type' => 'danger', 'message' => 'New password and confirm password must be the same'];
+                $this->views->getView($this,'security', $data);
+                return;
+            }
+    
+            try {
+                $isUpdateSuccess = $this->model->updatePasswordById($user['id'], $newPassword);
+                if($isUpdateSuccess) {
+                    $data['alert'] = ['type' => 'success', 'message' => 'Password updated successfully'];
+                } else {
+                    $data['alert'] = ['type' => 'danger', 'message' => 'Error updating password'];
+                }
+            } catch (\PDOException $e) {
+                $data['alert'] = ['type' => 'danger', 'message' => 'Error updating password'.$e->getMessage()];
+            }
+        }
+
+        $this->views->getView($this,'security', $data);
     }
 }

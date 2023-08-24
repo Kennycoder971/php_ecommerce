@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
 <?php include_once("Views/includes/header.php");?>
 
 <?php include_once("Views/includes/nav.php");?>
@@ -7,19 +5,7 @@
 <div class="container-fluid"">
 <div class=" row">
 
-    <nav id=" sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar mb-3">
-        <div class="position-sticky">
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link" href="">Edit Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="settings.php">Settings</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
+    <?php include("Views/Profile/sidebar.php");?>
 
     <main class=" col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <h2>Edit Profile</h2>
