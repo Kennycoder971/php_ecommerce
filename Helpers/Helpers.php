@@ -50,11 +50,10 @@ function generateBcryptPassword($str) {
     return password_hash($str, PASSWORD_BCRYPT, $options);
 }
 
-function sessionUser() {
+function userSession() {
     session_start();
     if(!isset($_SESSION['userData'])) {
-        header('Location: '.base_url().'login');
-        die();
+        return null;
     }
     return $_SESSION['userData'];
 }
@@ -75,4 +74,11 @@ function token() {
 function formatMoney($cantidad) {
     $cantidad = number_format($cantidad, 2, SPD, SPM);
     return $cantidad;
+}
+
+function destroySession() {
+    session_start();
+    $_SESSION = array();
+    session_destroy();
+    die();
 }

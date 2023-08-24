@@ -9,6 +9,7 @@ class Auth extends Controller{
             $password = strClean($_POST['password']);
             $password2 = strClean($_POST['password2']);
             $isSeller = isset($_POST['isSeller']) ? 1 : 0;
+            
             if($password != $password2) {
                 $data['alert'] = ['type' => 'danger', 'message' => 'Passwords do not match'];
                 $this->views->getView($this,'register', $data);
@@ -19,7 +20,7 @@ class Auth extends Controller{
                 $request = $this->model->register($name, $email, $password, $isSeller);
                 if(is_numeric($request)) {
                     $user = $this->model->getUserById($request);
-                    setSession($user[0]);
+                    setSession($user);
                     header('Location: '.base_url().'?msg=success');
                     return;
                 } 
@@ -58,5 +59,11 @@ class Auth extends Controller{
             }
         }
         $this->views->getView($this,'login', $data);
+    }
+
+    public function logout() {
+        destroySession();
+        var_dump($_SESSION);
+        header('Location: '.base_url());
     }
 }
