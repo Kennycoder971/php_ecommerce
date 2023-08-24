@@ -63,7 +63,7 @@ class Auth extends Controller{
 
     public function logout() {
         destroySession();
-        var_dump($_SESSION);
+        var_dump('Hello');
         header('Location: '.base_url());
     }
 }

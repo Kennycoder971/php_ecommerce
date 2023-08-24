@@ -1,4 +1,4 @@
-<?php  include("Views/includes/header.php"); ?>
+<?php  include_once("Views/includes/header.php"); ?>
 
 <div class="container mt-5">
 
@@ -24,4 +24,4 @@
     </form>
 </div>
 
-<?php  include("Views/includes/footer.php"); ?>
+<?php  include_once("Views/includes/footer.php"); ?>

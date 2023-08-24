@@ -1,6 +1,5 @@
 <?php 
-
-$user = userSession();
+$user = getUserSession();
 
 ?>
 
@@ -16,22 +15,30 @@ $user = userSession();
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">Home</a>
                 </li>
+
                 <?php if(empty($user)): ?>
                 <a href="<?= base_url() ?>/auth/login" class='btn-primary btn'>Log in</a>
                 <?php else: ?>
+
                 <div class="dropdown">
                     <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         <?= isset($user['username']) ? $user['username'] : 'user' ?>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="#">My profile</a></li>
-                        <li><a class="dropdown-item" href="#">My purchases</a></li>
+                        <li><a class="dropdown-item" href="<?= base_url() ?>/profile/index">My profile</a></li>
+                        <li><a class="dropdown-item" href="#">My orders</a></li>
+
+                        <?php if($user['isSeller']): ?>
                         <li><a class="dropdown-item" href="#">My sales</a></li>
                         <li><a class="dropdown-item" href="#">My products</a></li>
-                        <li><a class="dropdown-item" href="<?= base_url() ?>/auth/logout">Log out</a></li>
+                        <?php endif; ?>
+
+                        <li><a class="dropdown-item bg-warning" href="<?= base_url() ?>auth/logout">Log out</a></li>
                     </ul>
+
                     <?php endif; ?>
+
             </ul>
 
         </div>

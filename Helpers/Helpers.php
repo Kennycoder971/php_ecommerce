@@ -50,17 +50,23 @@ function generateBcryptPassword($str) {
     return password_hash($str, PASSWORD_BCRYPT, $options);
 }
 
-function userSession() {
-    session_start();
-    if(!isset($_SESSION['userData'])) {
-        return null;
-    }
-    return $_SESSION['userData'];
-}
-
 function setSession($userData) {
     session_start();
     $_SESSION['userData'] = $userData;
+}
+
+function isSessionActive() {
+    return session_status() === PHP_SESSION_ACTIVE;
+}
+
+function getUserSession() {
+    if(!isSessionActive()) session_start();
+    
+    if ($_SESSION['userData']) {
+        return $_SESSION['userData'];
+    } else {
+        return null; // No active session
+    }
 }
 function token() {
     $r1 = bin2hex(random_bytes(10));
@@ -80,5 +86,5 @@ function destroySession() {
     session_start();
     $_SESSION = array();
     session_destroy();
-    die();
+    
 }

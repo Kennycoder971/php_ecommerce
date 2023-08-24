@@ -3,7 +3,7 @@
     $data['page_title'] = "Not Found";
 ?>
 
-<?php  include("Views/includes/header.php");
+<?php  include_once("Views/includes/header.php");
  ?>
 
 <div class="container text-center mt-5">
@@ -14,5 +14,5 @@
 
 
 
-<?php  include("Views/includes/footer.php");
+<?php  include_once("Views/includes/footer.php");
  ?>
