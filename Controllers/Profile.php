@@ -88,11 +88,11 @@ class Profile extends Controller {
         $data['user'] = $user;
 
         if($_SERVER['REQUEST_METHOD'] === "POST") {
-            $title = $_POST['title'];
-            $description = $_POST['description'];
-            $stock = $_POST['stock'];
-            $price = $_POST['price'];
-            $image = $_POST['image'] ?? '';
+            $title = strClean($_POST['title']);
+            $description = strClean($_POST['description']);
+            $stock = strClean($_POST['stock']);
+            $price = strClean($_POST['price']);
+            $image = isInputFileEmpty('image') ?  null : $_FILES['image'];
 
             if(empty($title) || empty($description) || empty($stock) || empty($price)) {
                 $data['alert'] = ['type' => 'danger', 'message' => 'Title, description, stock and price are required'];
@@ -103,19 +103,40 @@ class Profile extends Controller {
             try {
                 $productModel = $this->loadModelByName('Product');
                 
-                $isInsertSuccess = $productModel->insertProduct($title, $description, $stock, $price, $user['id']);
-                
-                if($isInsertSuccess) {
-                    $isNotImage = empty($image);
-                    $imagePath = $isNotImage ? createImgURL('default.png') : createImgURL($image);
-                    $isInsertImageSuccess = $productModel->uploadProductImage($isInsertSuccess, $imagePath);
-                    
-                    if($isInsertImageSuccess) {
+                // if no image was uploaded
+                if(empty($image)) {
+                    $isInsertSuccess = $productModel->insertProduct($title, $description, $stock, $price, $user['id']);
+
+                    if($isInsertSuccess) {
                         $data['alert'] = ['type' => 'success', 'message' => 'Product added successfully'];
                     } else {
-                        $data['alert'] = ['type' => 'danger', 'message' => 'Error adding product image'];
+                        $data['alert'] = ['type' => 'danger', 'message' => 'Error adding product'];
+                        $this->views->getView($this,'addProduct', $data);
+                        return;
                     }
-                } 
+                }
+
+                // if image was uploaded
+                if(!empty($image)) {
+                    $imageError = uploadImage('image');
+                    var_dump($image);
+                    // if there is and error while uploading the image
+                    if(!empty($imageError['error'])) {
+                        $data['alert'] = ['type' => 'danger', 'message' => $imageError['error']];
+                        $this->views->getView($this,'addProduct', $data);
+                        return;
+                    }
+
+                    // if there is no error while uploading the image
+                    $imageUrl = $imageError['targetFile'];
+                    $isInsertSuccess = $productModel->insertProduct($title, $description, $stock, $price, $user['id']);
+                    $isInsertImageSuccess = $productModel->uploadProductImage($isInsertSuccess, $imageUrl);
+                    $data['alert'] = ['type' => 'success', 'message' => 'Product added successfully'];
+                    $this->views->getView($this,'addProduct', $data);
+                    return;
+                    
+                }
+
             } catch (\PDOException $e) {
                 $data['alert'] = ['type' => 'danger', 'message' => 'Error adding product'.$e->getMessage()];
             }
