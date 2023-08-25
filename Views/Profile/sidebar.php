@@ -15,7 +15,10 @@
 
             <?php if($user['isSeller']): ?>
             <li class="nav-item">
-                <a class="nav-link" href="<?= base_url() ?>profile/addProducts">Add products</a>
+                <a class="nav-link" href="<?= base_url() ?>profile/addProducts">Add product</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url() ?>profile/myProducts">My products</a>
             </li>
             <?php endif; ?>
         </ul>

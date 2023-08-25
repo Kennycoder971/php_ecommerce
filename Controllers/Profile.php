@@ -87,6 +87,11 @@ class Profile extends Controller {
         $user = getUserSession();
         $data['user'] = $user;
 
+        if($_SERVER['REQUEST_METHOD'] === 'GET'&& $user['isSeller'] == 0) {
+            $this->views->getView($this,'profile', $data);
+            return;
+        }
+        
         if($_SERVER['REQUEST_METHOD'] === "POST") {
             $title = strClean($_POST['title']);
             $description = strClean($_POST['description']);
@@ -146,6 +151,14 @@ class Profile extends Controller {
 
     }
 
+    public function myProducts () {
+        $data['page_title'] = 'My products';
+        $user = getUserSession();
+        $data['user'] = $user;
 
+        $this->views->getView($this,'myProducts', $data);
+    }
+
+    
 
 }
