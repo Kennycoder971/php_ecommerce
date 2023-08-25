@@ -3,7 +3,13 @@
 function base_url() {
     return BASE_URL;
 }
+function assest() {
+    return BASE_URL."Assets/";
+}
 
+function createImgURL($imgName) {
+    return BASE_URL."Assets/images/".$imgName;
+}
 function dep($data) {
     $format = print_r('<pre>');
     $format .= print_r($data);

@@ -81,4 +81,50 @@ class Profile extends Controller {
 
         $this->views->getView($this,'security', $data);
     }
+
+    public function addProducts () {
+        $data['page_title'] = 'Add product';
+        $user = getUserSession();
+        $data['user'] = $user;
+
+        if($_SERVER['REQUEST_METHOD'] === "POST") {
+            $title = $_POST['title'];
+            $description = $_POST['description'];
+            $stock = $_POST['stock'];
+            $price = $_POST['price'];
+            $image = $_POST['image'] ?? '';
+
+            if(empty($title) || empty($description) || empty($stock) || empty($price)) {
+                $data['alert'] = ['type' => 'danger', 'message' => 'Title, description, stock and price are required'];
+                $this->views->getView($this,'addProduct', $data);
+                return;
+            }
+
+            try {
+                $productModel = $this->loadModelByName('Product');
+                
+                $isInsertSuccess = $productModel->insertProduct($title, $description, $stock, $price, $user['id']);
+                
+                if($isInsertSuccess) {
+                    $isNotImage = empty($image);
+                    $imagePath = $isNotImage ? createImgURL('default.png') : createImgURL($image);
+                    $isInsertImageSuccess = $productModel->uploadProductImage($isInsertSuccess, $imagePath);
+                    
+                    if($isInsertImageSuccess) {
+                        $data['alert'] = ['type' => 'success', 'message' => 'Product added successfully'];
+                    } else {
+                        $data['alert'] = ['type' => 'danger', 'message' => 'Error adding product image'];
+                    }
+                } 
+            } catch (\PDOException $e) {
+                $data['alert'] = ['type' => 'danger', 'message' => 'Error adding product'.$e->getMessage()];
+            }
+            
+        }
+        $this->views->getView($this,'addProduct', $data);
+
+    }
+
+
+
 }
