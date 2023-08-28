@@ -124,7 +124,6 @@ class Profile extends Controller {
                 // if image was uploaded
                 if(!empty($image)) {
                     $imageError = uploadImage('image');
-                    var_dump($image);
                     // if there is and error while uploading the image
                     if(!empty($imageError['error'])) {
                         $data['alert'] = ['type' => 'danger', 'message' => $imageError['error']];
@@ -155,10 +154,23 @@ class Profile extends Controller {
         $data['page_title'] = 'My products';
         $user = getUserSession();
         $data['user'] = $user;
-
+        $this->loadModelByName('User');
+        try {
+            $products = $this->model->getUserProductsById($user['id']);
+            $data['products'] = $products; 
+        } catch (\PDOException $e) {
+            $data['alert'] = ['type' => 'danger', 'message' => 'Error getting products'.$e->getMessage()];
+        }
         $this->views->getView($this,'myProducts', $data);
     }
 
+    public function editProduct () {
+        $data['page_title'] = 'My products';
+        $user = getUserSession();
+        $data['user'] = $user;
+        $this->views->getView($this,'editProduct', $data);
+
+    }
     
 
 }
