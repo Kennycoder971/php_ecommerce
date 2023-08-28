@@ -5,6 +5,24 @@ class productModel extends Mysql {
         parent::__construct();
     }
 
+    public function getProducts() {
+        $query = "SELECT *
+                  FROM product
+                  LEFT JOIN productImages ON product.id = productImages.productId
+                  ORDER BY createdAt DESC";
+        $products = $this->select_all($query);
+        return $products;
+    }
+
+    public function getWeeklyProducts() {
+        $query = "SELECT *
+                  FROM product
+                  LEFT JOIN productImages ON product.id = productImages.productId
+                  WHERE createdAt >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
+                  ORDER BY createdAt DESC";
+        $products = $this->select_all($query);
+        return $products;
+    }
     public function getProductById($id) {
         $query = "SELECT *
                   FROM product

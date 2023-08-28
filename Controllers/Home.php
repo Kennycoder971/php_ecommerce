@@ -7,7 +7,14 @@ class Home extends Controller {
     
     public function home($params) {
          $data['page_title'] = "Home";
-         $this->views->getView($this,'home', $data);
+         $productModel = $this->loadModelByName('Product');
+         try {
+            $data['weeklyProducts'] = $productModel->getWeeklyProducts();
+            $this->views->getView($this,'home', $data);
+         } catch (\PDOException $e) {
+            $data['error'] = "Error getting products";
+         }
     }
+
 
 }
