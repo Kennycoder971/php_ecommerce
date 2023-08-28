@@ -222,7 +222,6 @@ class Profile extends Controller {
                     $data['alert'] = ['type' => 'success', 'message' => 'Product modified successfully'];
                     $product = $productModel->getProductById(strClean($productId));
                     $data['product'] = $product;
-                    var_dump($product);
                     $this->views->getView($this,'editProduct', $data);
                     return;
                 } else {
@@ -239,5 +238,33 @@ class Profile extends Controller {
 
     }
     
-
+    public function deleteProduct($productId) {
+        $data['page_title'] = 'My products';
+        $user = getUserSession();
+        $data['user'] = $user;
+        $productModel = $this->loadModelByName('Product');
+        if($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $productModel = $this->loadModelByName('Product');
+            try {
+                $product = $productModel->getProductById(strClean($productId));
+                
+                if(!$product){
+                    header('Location: '.base_url().'profile/myProducts');
+                    return;
+                }
+                if($product['userId'] !== $user['id']) {
+                    header('Location: '.base_url().'profile/myProducts');
+                    return;
+                }
+            
+                $isDeleteSuccess = $productModel->deleteProductById($productId);
+                header('Location: '.base_url().'profile/myProducts');
+                return;
+            } catch (\PDOException $e) {
+                $data['alert'] = ['type' => 'danger', 'message' => 'Error getting product'.$e->getMessage()];
+            }
+            $this->views->getView($this,'editProduct', $data);
+            return;
+        }
+    }
 }

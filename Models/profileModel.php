@@ -18,4 +18,6 @@ class profileModel extends Mysql {
         $isSuccess = $this->update($query, $arrData);
         return $isSuccess;
     }
+
+  
 }

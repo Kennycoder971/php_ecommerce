@@ -51,7 +51,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Repeat the above card structure for each image -->
+
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Add Product</button>

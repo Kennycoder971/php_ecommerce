@@ -27,6 +27,11 @@ class productModel extends Mysql {
         $request = $this->update($query, $arrData);
         return $request;
     }
+    public function deleteProductById($id) {
+        $query = "DELETE FROM product WHERE id = $id";
+        $request = $this->delete($query);
+        return $request;
+    }
     public function uploadProductImage($productId, $imageUrl) {
         $query = "INSERT INTO productImages (productId, imgUrl) VALUES (?,?)";
         $arrData = array($productId, $imageUrl);
