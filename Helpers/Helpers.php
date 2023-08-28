@@ -11,6 +11,11 @@ function assets() {
 function createImgURL($imgName) {
     return BASE_URL."Assets/images/".$imgName;
 }
+
+function productImage($product) {
+    $img = isset($product['imgUrl']) ? base_url(). $product['imgUrl'] : assets().'images/noImage.jpeg';
+    return $img;
+}
 function dep($data) {
     $format = print_r('<pre>');
     $format .= print_r($data);

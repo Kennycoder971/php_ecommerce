@@ -154,9 +154,9 @@ class Profile extends Controller {
         $data['page_title'] = 'My products';
         $user = getUserSession();
         $data['user'] = $user;
-        $this->loadModelByName('User');
+        $userModel = $this->loadModelByName('User');
         try {
-            $products = $this->model->getUserProductsById($user['id']);
+            $products = $userModel ->getUserProductsById($user['id']);
             $data['products'] = $products; 
         } catch (\PDOException $e) {
             $data['alert'] = ['type' => 'danger', 'message' => 'Error getting products'.$e->getMessage()];
@@ -164,11 +164,78 @@ class Profile extends Controller {
         $this->views->getView($this,'myProducts', $data);
     }
 
-    public function editProduct () {
+    public function editProduct ($productId) {
         $data['page_title'] = 'My products';
         $user = getUserSession();
         $data['user'] = $user;
-        $this->views->getView($this,'editProduct', $data);
+        
+        if($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $productModel = $this->loadModelByName('Product');
+            try {
+                $product = $productModel->getProductById(strClean($productId));
+                
+                if(!$product){
+                    $data['alert'] = ['type' => 'danger', 'message' => 'Product not found'];
+                    header('Location: '.base_url().'profile/myProducts');
+                    return;
+                }
+                if($product['userId'] !== $user['id']) {
+                    $data['alert'] = ['type' => 'danger', 'message' => 'You are not authorized to edit this product'];
+                    header('Location: '.base_url().'profile/myProducts');
+                    return;
+                }
+                $data['product'] = $product;   
+               
+            } catch (\PDOException $e) {
+                $data['alert'] = ['type' => 'danger', 'message' => 'Error getting product'.$e->getMessage()];
+            }
+            $this->views->getView($this,'editProduct', $data);
+            return;
+        }
+
+        if($_SERVER['REQUEST_METHOD'] === "POST") {
+            $title = strClean($_POST['title']);
+            $description = strClean($_POST['description']);
+            $stock = strClean($_POST['stock']);
+            $price = strClean($_POST['price']);
+
+            if(empty($title) || empty($description) || empty($stock) || empty($price)) {
+                $data['alert'] = ['type' => 'danger', 'message' => 'Title, description, stock and price are required'];
+                try {
+                    $productModel = $this->loadModelByName('Product');
+                    $product = $productModel->getProductById(strClean($productId));
+                    $data['product'] = $product;
+                } catch (\Throwable $e) {
+                    $data['alert'] = ['type' => 'danger', 'message' => 'Error getting product'.$e->getMessage()];
+                }
+                $this->views->getView($this,'editProduct', $data);
+                return;
+            }
+
+            try {
+                $productModel = $this->loadModelByName('Product');
+                
+                $isInsertSuccess = $productModel->updateProductById($productId,$title, $description, $stock, $price, $user['id']);
+
+                if($isInsertSuccess) {
+                    
+                    $data['alert'] = ['type' => 'success', 'message' => 'Product modified successfully'];
+                    $product = $productModel->getProductById(strClean($productId));
+                    $data['product'] = $product;
+                    var_dump($product);
+                    $this->views->getView($this,'editProduct', $data);
+                    return;
+                } else {
+                    $data['alert'] = ['type' => 'danger', 'message' => 'Error adding product'];
+                    $this->views->getView($this,'editProduct', $data);
+                    return;
+                }
+
+            } catch (\PDOException $e) {
+                $data['alert'] = ['type' => 'danger', 'message' => 'Error adding product'.$e->getMessage()];
+            }
+            $this->views->getView($this,'editProduct', $data);
+        }
 
     }
     

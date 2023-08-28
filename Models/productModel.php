@@ -5,8 +5,11 @@ class productModel extends Mysql {
         parent::__construct();
     }
 
-    public function getUserProductsById($id) {
-        $query = "SELECT * FROM product WHERE userId = $id";
+    public function getProductById($id) {
+        $query = "SELECT *
+                  FROM product
+                  LEFT JOIN productImages ON product.id = productImages.productId
+                  WHERE product.id = $id ";
         $products = $this->select($query);
         return $products;
     }
@@ -18,6 +21,12 @@ class productModel extends Mysql {
         return $request;
     }
 
+    public function updateProductById($id, $title, $description, $stock, $price) {
+        $query = "UPDATE product SET title = ?, description = ?, stock = ?, price = ? WHERE id = $id";
+        $arrData = array($title, $description, $stock, $price);
+        $request = $this->update($query, $arrData);
+        return $request;
+    }
     public function uploadProductImage($productId, $imageUrl) {
         $query = "INSERT INTO productImages (productId, imgUrl) VALUES (?,?)";
         $arrData = array($productId, $imageUrl);

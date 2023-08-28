@@ -1,11 +1,3 @@
-<?php  
-
-function productImage($product) {
-    $img = isset($product['imgUrl']) ? base_url(). $product['imgUrl'] : assets().'images/noImage.jpeg';
-    return $img;
-}
-?>
-
 <?php include_once("Views/includes/header.php");?>
 
 <?php include_once("Views/includes/nav.php");?>
@@ -31,7 +23,7 @@ function productImage($product) {
                             <a href="<?= base_url() ?>profile/editProduct/<?=$product['id'] ?>"
                                 class="btn btn-primary">Edit</a>
                             <a href="<?= base_url() ?>profile/deleteProduct/<?=$product['id'] ?>"
-                                class="btn btn-success">Update</a>
+                                class="btn btn-danger">Delete</a>
                         </div>
                     </div>
                 </div>
